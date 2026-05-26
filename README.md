@@ -45,13 +45,24 @@ Try Bliss AI: https://www.MeditatewithBliss.com
 - Pending sends expire after 10 minutes by default.
 - v1 does not support arbitrary local file attachments.
 
-## Install
+## Install from npm
+
+Safe Gmail MCP is published on npm:
+
+```text
+https://www.npmjs.com/package/safe-gmail-mcp
+```
+
+Requirements:
+
+- Node.js 20 or newer
+- npm
 
 ```bash
 npm install -g safe-gmail-mcp
 ```
 
-Then run:
+Then connect Gmail:
 
 ```bash
 safegmail connect
@@ -62,7 +73,13 @@ BLISS-controlled HTTPS endpoint and opens Google login directly. The local
 browser UI also has a **Use my own Google OAuth app** option for users who
 prefer their own Google Cloud project.
 
-Or run with `npx` from an MCP client:
+You can also run it without a global install:
+
+```bash
+npx -y safe-gmail-mcp serve
+```
+
+For a quick CLI check:
 
 ```bash
 npx -y safe-gmail-mcp --help
