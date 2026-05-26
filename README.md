@@ -76,12 +76,12 @@ ID or client secret. Instead, it fetches default OAuth app metadata at runtime
 from:
 
 ```text
-https://www.meditatewithbliss.com/.well-known/safe-gmail-mcp/oauth-client.json
+https://www.meditatewithbliss.com/api/safe-gmail-mcp/oauth-client
 ```
 
-That endpoint returns only OAuth app metadata, not user tokens. Safe Gmail MCP
-still uses the OAuth Authorization Code flow with PKCE, and Gmail tokens stay on
-the user's machine.
+That endpoint is a plain unauthenticated GET API that returns only OAuth app
+metadata, not user tokens. Safe Gmail MCP still uses the OAuth Authorization
+Code flow with PKCE, and Gmail tokens stay on the user's machine.
 
 Expected endpoint shape:
 

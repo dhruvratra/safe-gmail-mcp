@@ -12,7 +12,7 @@ export const DEFAULT_PENDING_TTL_MINUTES = 10;
 export const DEFAULT_PENDING_TTL_MS = DEFAULT_PENDING_TTL_MINUTES * 60 * 1000;
 export const MAX_BULK_MESSAGES = 25;
 export const DEFAULT_OAUTH_CLIENT_METADATA_URL =
-  "https://www.meditatewithbliss.com/.well-known/safe-gmail-mcp/oauth-client.json";
+  "https://www.meditatewithbliss.com/api/safe-gmail-mcp/oauth-client";
 
 export const EXPECTED_TOOL_NAMES = [
   "prepare_send_email",
