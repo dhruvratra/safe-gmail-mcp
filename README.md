@@ -76,7 +76,7 @@ ID or client secret. Instead, it fetches default OAuth app metadata at runtime
 from:
 
 ```text
-https://www.meditatewithbliss.com/api/safe-gmail-mcp/oauth-client
+https://admin.meditatewithbliss.com/api/safe-gmail-mcp/oauth-client
 ```
 
 That endpoint is a plain unauthenticated GET API that returns only OAuth app
