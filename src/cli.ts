@@ -2,7 +2,8 @@
 import { ConfigLoader } from "./config/config.js";
 import { APP_NAME, GMAIL_SEND_SCOPE, PACKAGE_NAME } from "./constants.js";
 import { publicErrorMessage } from "./errors.js";
-import { AuthPageState, runAuthServer } from "./auth/authServer.js";
+import { runAuthServer } from "./auth/authServer.js";
+import type { AuthPageState } from "./auth/authTypes.js";
 import { TokenStore } from "./auth/tokenStore.js";
 import { StatePaths } from "./storage/paths.js";
 import { removeDirIfExists } from "./storage/privateFiles.js";
