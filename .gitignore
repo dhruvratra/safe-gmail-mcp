@@ -1,0 +1,15 @@
+node_modules/
+dist/
+coverage/
+.DS_Store
+*.log
+npm-debug.log*
+.env
+.env.*
+
+# Local state must live outside the repository. These are defense-in-depth.
+.safe-gmail-mcp/
+tokens.json
+pending/
+audit.log
+config.json

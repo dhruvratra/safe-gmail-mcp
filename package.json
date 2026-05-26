@@ -1,0 +1,54 @@
+{
+  "name": "safe-gmail-mcp",
+  "version": "0.1.0",
+  "description": "Security-focused local MCP server for preparing and explicitly confirming Gmail sends.",
+  "type": "module",
+  "bin": {
+    "safe-gmail-mcp": "./dist/cli.js",
+    "safegmail": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "scripts",
+    "README.md",
+    "LICENSE",
+    "SECURITY.md",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md",
+    "examples"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "tsc -p tsconfig.json --noEmit",
+    "test": "npm run build && node --test test/*.test.mjs",
+    "smoke:pack": "node scripts/smoke-pack.mjs",
+    "pack:dry-run": "npm pack --dry-run"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "gmail",
+    "oauth2",
+    "pkce",
+    "email"
+  ],
+  "author": "Dhruv Ratra",
+  "homepage": "https://www.MeditatewithBliss.com",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/safe-gmail-mcp.git"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.29.0",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.29",
+    "typescript": "^5.8.3"
+  }
+}

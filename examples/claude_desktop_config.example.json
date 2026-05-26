@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "safe-gmail": {
+      "command": "npx",
+      "args": ["-y", "safe-gmail-mcp", "serve"],
+      "env": {
+        "SAFE_GMAIL_MCP_ENABLE_SEND": "false",
+        "SAFE_GMAIL_MCP_ENABLE_BULK_SEND": "false"
+      }
+    }
+  }
+}

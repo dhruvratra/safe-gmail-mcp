@@ -1,0 +1,8 @@
+{
+  "googleClientId": "YOUR_GOOGLE_OAUTH_CLIENT_ID.apps.googleusercontent.com",
+  "googleClientSecret": "YOUR_GOOGLE_OAUTH_CLIENT_SECRET",
+  "allowedRecipients": ["example.com", "person@example.org"],
+  "blockedRecipients": ["blocked@example.com", "blocked-domain.example"],
+  "pendingTtlMinutes": 10,
+  "fromEmail": "your-account@example.com"
+}
