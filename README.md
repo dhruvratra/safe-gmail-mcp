@@ -173,9 +173,9 @@ and opens:
 http://127.0.0.1:<port>
 ```
 
-The page shows a Connect Gmail button and a short safety note. If default OAuth
-metadata can be fetched, Connect Gmail opens Google login directly. If it cannot
-be fetched, the page falls back to BYO OAuth app fields. The page also offers
+The page shows a Continue with Google button and a short safety note. If default
+OAuth metadata can be fetched, Continue with Google opens Google login directly.
+If it cannot be fetched, the page falls back to BYO OAuth app fields. The page also offers
 **Use my own Google OAuth app** for local-only BYO credentials. After Google
 redirects back to the loopback callback, the CLI verifies `state`, exchanges
 the code using PKCE, writes tokens under `~/.safe-gmail-mcp/`, and exits.
