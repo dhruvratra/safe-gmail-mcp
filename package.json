@@ -1,11 +1,11 @@
 {
   "name": "safe-gmail-mcp",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Security-focused local MCP server for reading Gmail headers and explicitly confirming Gmail sends.",
   "type": "module",
   "bin": {
-    "safe-gmail-mcp": "./dist/cli.js",
-    "safegmail": "./dist/cli.js"
+    "safe-gmail-mcp": "dist/cli.js",
+    "safegmail": "dist/cli.js"
   },
   "files": [
     "dist",
@@ -38,7 +38,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/dhruvratra/safe-gmail-mcp.git"
+    "url": "git+https://github.com/dhruvratra/safe-gmail-mcp.git"
   },
   "engines": {
     "node": ">=20.0.0"

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.1
+
+- Added public Safe Gmail MCP pages for the Bliss website.
+- Updated security documentation with Gmail data-handling details.
+- Updated package metadata homepage.
+
 ## 0.2.0
 
 - Added Gmail read tools for listing unread headers and reading one body by
