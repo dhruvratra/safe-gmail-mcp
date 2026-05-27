@@ -23,8 +23,9 @@ call Google APIs or send real email.
 
 ## Security Rules
 
-- Do not add Gmail read, modify, delete, label, forwarding, settings, or
-  `mail.google.com` scopes.
+- Gmail scope changes need explicit security review. Do not add delete,
+  forwarding, settings, attachment download, or `mail.google.com` scopes.
+- Keep read behavior split between header listing and explicit body fetches.
 - Do not log tokens, client secrets, email bodies, or attachment contents.
 - Do not add arbitrary local file attachment support without a separate design
   review.

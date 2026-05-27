@@ -6,6 +6,7 @@ import {
   normalizeGoogleClientId,
   normalizeGoogleClientSecret,
 } from "../dist/config/config.js";
+import { fetchDefaultOAuthClient } from "../dist/config/defaultOAuthClient.js";
 import { tempPaths } from "./helpers.mjs";
 
 test("normalizes Google OAuth client IDs", () => {
@@ -34,6 +35,28 @@ test("remote default Google OAuth credentials are the fallback", async () => {
   assert.equal(config.googleClientIdSource, "default");
   assert.equal(config.googleClientSecret, "default-secret");
   assert.equal(config.googleClientSecretSource, "default");
+});
+
+test("default OAuth metadata accepts legacy scope text", async () => {
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async () =>
+    new Response(
+      JSON.stringify({
+        clientId: "default-client.apps.googleusercontent.com",
+        clientSecret: "default-secret",
+        scope: "https://www.googleapis.com/auth/gmail.send",
+      }),
+      { status: 200, headers: { "Content-Type": "application/json" } },
+    );
+
+  try {
+    assert.deepEqual(await fetchDefaultOAuthClient("https://example.test/oauth"), {
+      clientId: "default-client.apps.googleusercontent.com",
+      clientSecret: "default-secret",
+    });
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
 });
 
 test(

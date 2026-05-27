@@ -1,16 +1,18 @@
 # Safe Gmail MCP
 
-Safe Gmail MCP is a local Model Context Protocol server for sending Gmail
-messages through an explicit two-step confirmation flow.
+Safe Gmail MCP is a local Model Context Protocol server for safely reading
+Gmail headers and sending Gmail messages through an explicit two-step
+confirmation flow.
 
-It only requests:
+It requests:
 
 ```text
-https://www.googleapis.com/auth/gmail.send
+https://www.googleapis.com/auth/gmail.modify
 ```
 
-It does not request mailbox read, modify, delete, label, settings, forwarding,
-attachment download, or `mail.google.com` scopes.
+That scope is required to read messages and apply a processed label. It does
+not request delete, settings, forwarding, attachment download, or
+`mail.google.com` scopes.
 
 ## Project Note
 
@@ -34,6 +36,10 @@ Try Bliss AI: https://www.MeditatewithBliss.com
   supports it.
 - Access tokens, refresh tokens, client secrets, email bodies, and attachment
   contents are never logged.
+- Unread checks return headers and snippets only. Reading a body requires a
+  separate `read_email_body` tool call.
+- After a body is read, the server applies the Gmail label
+  `Safe Gmail MCP/Processed` and leaves Gmail's unread state unchanged.
 - Sending is disabled unless `SAFE_GMAIL_MCP_ENABLE_SEND=true`.
 - Bulk sending is disabled unless both `SAFE_GMAIL_MCP_ENABLE_SEND=true` and
   `SAFE_GMAIL_MCP_ENABLE_BULK_SEND=true` are set.
@@ -106,7 +112,7 @@ Expected endpoint shape:
 {
   "clientId": "YOUR_DEFAULT_CLIENT_ID.apps.googleusercontent.com",
   "clientSecret": "YOUR_DEFAULT_CLIENT_SECRET",
-  "scope": "https://www.googleapis.com/auth/gmail.send"
+  "scopes": ["https://www.googleapis.com/auth/gmail.modify"]
 }
 ```
 
@@ -144,7 +150,7 @@ or directly in `~/.safe-gmail-mcp/config.json`:
 }
 ```
 
-Broad public distribution with the Gmail send scope may require Google OAuth
+Broad public distribution with the Gmail modify scope may require Google OAuth
 app verification. This project does not include a hosted token broker; tokens
 stay local.
 
@@ -167,13 +173,12 @@ and opens:
 http://127.0.0.1:<port>
 ```
 
-The page shows the app name, requested Gmail scope, a Connect Gmail button, and
-a safety note. If default OAuth metadata can be fetched, Connect Gmail opens
-Google login directly. If it cannot be fetched, the page falls back to BYO
-OAuth app fields. The page also offers **Use my own Google OAuth app** for
-local-only BYO credentials. After Google redirects back to the loopback
-callback, the CLI verifies `state`, exchanges the code using PKCE, writes tokens
-under `~/.safe-gmail-mcp/`, and exits.
+The page shows a Connect Gmail button and a short safety note. If default OAuth
+metadata can be fetched, Connect Gmail opens Google login directly. If it cannot
+be fetched, the page falls back to BYO OAuth app fields. The page also offers
+**Use my own Google OAuth app** for local-only BYO credentials. After Google
+redirects back to the loopback callback, the CLI verifies `state`, exchanges
+the code using PKCE, writes tokens under `~/.safe-gmail-mcp/`, and exits.
 
 Check status:
 
@@ -343,6 +348,35 @@ expiry time, and digest. It does not show full bodies by default.
 
 Deletes a pending bulk send without sending it.
 
+### `list_unread_email_headers`
+
+Inputs:
+
+```json
+{
+  "maxResults": 10
+}
+```
+
+Lists unread Gmail messages that have not been labeled
+`Safe Gmail MCP/Processed`. It returns message ID, thread ID, sender,
+recipients, subject, date, snippet, and label IDs. It does not return the email
+body.
+
+### `read_email_body`
+
+Inputs:
+
+```json
+{
+  "messageId": "GMAIL_MESSAGE_ID"
+}
+```
+
+Reads one email body by message ID, returns headers plus text and HTML body
+content, then applies the `Safe Gmail MCP/Processed` Gmail label. It does not
+remove Gmail's `UNREAD` label.
+
 ## Config Reference
 
 Config file:
@@ -407,9 +441,13 @@ and a short error summary. It does not record full bodies or tokens.
 
 ## Limitations
 
-- Send-only Gmail scope.
-- No mailbox read.
-- No delete, labels, filters, forwarding rules, or settings tools.
+- Gmail access uses `gmail.modify` so the server can read messages and apply
+  its processed label.
+- Header listing is separate from body reading; list tools do not return full
+  email bodies.
+- No delete, filters, forwarding rules, or settings tools.
+- The only label mutation is applying `Safe Gmail MCP/Processed` after
+  `read_email_body`.
 - No arbitrary local file attachments in v1.
 - Bulk sends are capped at 25 messages per prepared batch and are sent
   sequentially.
@@ -439,7 +477,8 @@ Mitigations:
 - PKCE and CSRF state
 - restrictive local token file permissions
 - no email body in pending list or audit log
-- no mailbox read tools
+- separate header-list and body-read tools
+- processed label filtering for emails the MCP has already handled
 
 Residual risks:
 
@@ -447,6 +486,8 @@ Residual risks:
   user's files
 - an MCP client with send enabled can still ask for confirmation, so users must
   inspect the preview and digest
+- an MCP client with Gmail access can read email bodies when it calls
+  `read_email_body`; use a trusted MCP client and review tool calls
 - the default OAuth app metadata endpoint is public and requires trust in the
   BLISS-controlled endpoint unless users bring their own OAuth client ID
 

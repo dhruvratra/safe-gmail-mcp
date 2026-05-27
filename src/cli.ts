@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 import { ConfigLoader } from "./config/config.js";
-import { APP_NAME, GMAIL_SEND_SCOPE, PACKAGE_NAME } from "./constants.js";
+import { APP_NAME, PACKAGE_NAME, REQUIRED_GMAIL_SCOPES } from "./constants.js";
 import { publicErrorMessage } from "./errors.js";
 import { runAuthServer } from "./auth/authServer.js";
 import type { AuthPageState } from "./auth/authTypes.js";
-import { TokenStore } from "./auth/tokenStore.js";
+import { hasRequiredScopes, TokenStore } from "./auth/tokenStore.js";
 import { StatePaths } from "./storage/paths.js";
 import { removeDirIfExists } from "./storage/privateFiles.js";
 import { serveMcp } from "./mcp/server.js";
@@ -67,10 +67,13 @@ async function handleAuth(
   const tokenStore = new TokenStore(paths);
 
   if (subcommand === "status") {
-    const connected = await tokenStore.hasUsableTokens();
+    const tokens = await tokenStore.load();
+    const connected = tokens ? await tokenStore.hasUsableTokens() : false;
     process.stdout.write(
       connected
         ? `Gmail connected. Token file: ${tokenStore.tokenFileForDisplay()}\n`
+        : tokens && !hasRequiredScopes(tokens)
+          ? "Gmail needs reconnecting for the current Gmail scope. Run 'safegmail connect'.\n"
         : "Gmail is not connected.\n",
     );
     return;
@@ -142,7 +145,7 @@ Usage:
   ${PACKAGE_NAME} --help
 
 Gmail scope:
-  ${GMAIL_SEND_SCOPE}
+  ${REQUIRED_GMAIL_SCOPES.join("\n  ")}
 
 Environment:
   SAFE_GMAIL_MCP_GOOGLE_CLIENT_ID   Google OAuth public/native client ID
@@ -154,6 +157,7 @@ Environment:
 First-run auth:
   safegmail connect fetches the default OAuth app metadata when available.
   The local page also lets users view, change, or delete their own OAuth app.
+  Version 0.2.0 adds Gmail read support and requires reconnecting old tokens.
 `);
 }
 

@@ -1,12 +1,17 @@
 export const APP_NAME = "Safe Gmail MCP";
 export const PACKAGE_NAME = "safe-gmail-mcp";
-export const VERSION = "0.1.0";
+export const VERSION = "0.2.0";
 
-export const GMAIL_SEND_SCOPE = "https://www.googleapis.com/auth/gmail.send";
+export const GMAIL_MODIFY_SCOPE = "https://www.googleapis.com/auth/gmail.modify";
+export const REQUIRED_GMAIL_SCOPES = [GMAIL_MODIFY_SCOPE] as const;
 export const GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth";
 export const GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token";
+export const GMAIL_API_BASE_URL = "https://gmail.googleapis.com/gmail/v1";
 export const GMAIL_SEND_URL =
-  "https://gmail.googleapis.com/gmail/v1/users/me/messages/send";
+  `${GMAIL_API_BASE_URL}/users/me/messages/send`;
+export const PROCESSED_LABEL_NAME = "Safe Gmail MCP/Processed";
+export const DEFAULT_READ_MAX_RESULTS = 10;
+export const MAX_READ_MAX_RESULTS = 50;
 
 export const DEFAULT_PENDING_TTL_MINUTES = 10;
 export const DEFAULT_PENDING_TTL_MS = DEFAULT_PENDING_TTL_MINUTES * 60 * 1000;
@@ -23,4 +28,6 @@ export const EXPECTED_TOOL_NAMES = [
   "confirm_bulk_send",
   "list_pending_bulk_sends",
   "discard_pending_bulk_send",
+  "list_unread_email_headers",
+  "read_email_body",
 ] as const;

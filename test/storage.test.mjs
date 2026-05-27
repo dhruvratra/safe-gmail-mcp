@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { stat } from "node:fs/promises";
 import path from "node:path";
-import { TokenStore } from "../dist/auth/tokenStore.js";
+import { hasRequiredScopes, TokenStore } from "../dist/auth/tokenStore.js";
 import { StatePaths } from "../dist/storage/paths.js";
 import { tempPaths } from "./helpers.mjs";
 
@@ -23,10 +23,25 @@ test(
       refresh_token: "refresh-token",
       token_type: "Bearer",
       expires_in: 3600,
-      scope: "https://www.googleapis.com/auth/gmail.send",
+      scope: "https://www.googleapis.com/auth/gmail.modify",
     });
 
     const mode = (await stat(paths.tokenFile)).mode & 0o777;
     assert.equal(mode, 0o600);
   },
 );
+
+test("send-only tokens are not usable after gmail.modify upgrade", async () => {
+  const paths = await tempPaths();
+  const store = new TokenStore(paths);
+  const tokens = await store.saveFromGoogleResponse({
+    access_token: "access-token",
+    refresh_token: "refresh-token",
+    token_type: "Bearer",
+    expires_in: 3600,
+    scope: "https://www.googleapis.com/auth/gmail.send",
+  });
+
+  assert.equal(hasRequiredScopes(tokens), false);
+  assert.equal(await store.hasUsableTokens(), false);
+});

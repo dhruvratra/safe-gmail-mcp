@@ -1,7 +1,7 @@
 import {
-  GMAIL_SEND_SCOPE,
   GOOGLE_AUTH_URL,
   GOOGLE_TOKEN_URL,
+  REQUIRED_GMAIL_SCOPES,
 } from "../constants.js";
 import { AuthError } from "../errors.js";
 import { GoogleTokenResponse, StoredTokens, TokenStore } from "./tokenStore.js";
@@ -25,7 +25,7 @@ export class GoogleOAuthClient {
     url.searchParams.set("client_id", options.clientId);
     url.searchParams.set("redirect_uri", options.redirectUri);
     url.searchParams.set("response_type", "code");
-    url.searchParams.set("scope", GMAIL_SEND_SCOPE);
+    url.searchParams.set("scope", REQUIRED_GMAIL_SCOPES.join(" "));
     url.searchParams.set("state", options.state);
     url.searchParams.set("code_challenge", options.codeChallenge);
     url.searchParams.set("code_challenge_method", "S256");
@@ -54,6 +54,7 @@ export class GoogleOAuthClient {
     if (!tokens) {
       throw new AuthError("Gmail is not connected. Run 'safe-gmail-mcp auth'.");
     }
+    this.tokenStore.assertRequiredScopes(tokens);
     if (tokens.expiresAt && tokens.expiresAt > now + 60_000) {
       return tokens.accessToken;
     }

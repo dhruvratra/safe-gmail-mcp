@@ -5,7 +5,7 @@ import { createMcpServer } from "../dist/mcp/server.js";
 import { expectedToolNames } from "../dist/mcp/tools.js";
 import { tempPaths } from "./helpers.mjs";
 
-test("expected tool registry contains only the public send tools", () => {
+test("expected tool registry contains only the public Gmail tools", () => {
   assert.deepEqual([...expectedToolNames()].sort(), [
     "confirm_bulk_send",
     "confirm_send_email",
@@ -13,8 +13,10 @@ test("expected tool registry contains only the public send tools", () => {
     "discard_pending_send",
     "list_pending_bulk_sends",
     "list_pending_sends",
+    "list_unread_email_headers",
     "prepare_bulk_send",
     "prepare_send_email",
+    "read_email_body",
   ]);
 });
 

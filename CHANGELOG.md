@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.2.0
+
+- Added Gmail read tools for listing unread headers and reading one body by
+  message ID.
+- Switched OAuth to the Gmail modify scope so messages can be read and labeled.
+- Added automatic `Safe Gmail MCP/Processed` labeling after body reads.
+- Kept Gmail unread state unchanged when applying the processed label.
+- Updated docs and packaging metadata for read support.
+
 ## 0.1.0
 
 - Initial public package structure.

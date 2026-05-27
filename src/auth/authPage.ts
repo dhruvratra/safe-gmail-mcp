@@ -28,7 +28,7 @@ export function renderAuthLandingPage(options: AuthLandingPageOptions): string {
     <section class="waitlist connect-card" aria-labelledby="connect-title">
       <div class="waitlist-copy">
         <h1 id="connect-title">Connect Gmail</h1>
-        <p class="lead">Send-only Gmail. You approve every email.</p>
+        <p class="lead">Read headers first. Sends still need approval.</p>
       </div>
 
       <div class="store-links connect-links">

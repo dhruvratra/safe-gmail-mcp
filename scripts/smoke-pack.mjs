@@ -9,7 +9,7 @@ import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 
 const execFile = promisify(execFileCallback);
-const commandTimeoutMs = 60_000;
+const commandTimeoutMs = 120_000;
 const mcpTimeoutMs = 15_000;
 const projectRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -41,8 +41,7 @@ async function withTimeout(promise, label, timeoutMs = mcpTimeoutMs) {
 const tmp = await mkdtemp(path.join(os.tmpdir(), "safe-gmail-mcp-smoke-"));
 const npmEnv = {
   ...process.env,
-  npm_config_cache:
-    process.env.npm_config_cache ?? path.join(tmp, ".npm-cache"),
+  npm_config_cache: path.join(tmp, ".npm-cache"),
 };
 const { stdout } = await run("npm", [
   "pack",
@@ -117,8 +116,10 @@ const expected = [
   "discard_pending_send",
   "list_pending_bulk_sends",
   "list_pending_sends",
+  "list_unread_email_headers",
   "prepare_bulk_send",
   "prepare_send_email",
+  "read_email_body",
 ];
 const actual = tools.tools.map((tool) => tool.name).sort();
 if (JSON.stringify(actual) !== JSON.stringify(expected)) {

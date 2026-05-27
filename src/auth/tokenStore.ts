@@ -1,4 +1,5 @@
 import { AuthError } from "../errors.js";
+import { REQUIRED_GMAIL_SCOPES } from "../constants.js";
 import {
   readJsonFile,
   removeFileIfExists,
@@ -69,10 +70,26 @@ export class TokenStore {
     if (!tokens) {
       return false;
     }
-    return Boolean(tokens.refreshToken || (tokens.expiresAt && tokens.expiresAt > now));
+    return (
+      hasRequiredScopes(tokens) &&
+      Boolean(tokens.refreshToken || (tokens.expiresAt && tokens.expiresAt > now))
+    );
+  }
+
+  assertRequiredScopes(tokens: StoredTokens): void {
+    if (!hasRequiredScopes(tokens)) {
+      throw new AuthError(
+        "Gmail token is missing the required Gmail scope. Run 'safegmail connect' again.",
+      );
+    }
   }
 
   tokenFileForDisplay(): string {
     return this.paths.display(this.paths.tokenFile);
   }
+}
+
+export function hasRequiredScopes(tokens: StoredTokens): boolean {
+  const granted = new Set((tokens.scope ?? "").split(/\s+/).filter(Boolean));
+  return REQUIRED_GMAIL_SCOPES.every((scope) => granted.has(scope));
 }

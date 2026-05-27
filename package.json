@@ -1,7 +1,7 @@
 {
   "name": "safe-gmail-mcp",
-  "version": "0.1.0",
-  "description": "Security-focused local MCP server for preparing and explicitly confirming Gmail sends.",
+  "version": "0.2.0",
+  "description": "Security-focused local MCP server for reading Gmail headers and explicitly confirming Gmail sends.",
   "type": "module",
   "bin": {
     "safe-gmail-mcp": "./dist/cli.js",

@@ -1,4 +1,4 @@
-import { DEFAULT_OAUTH_CLIENT_METADATA_URL, GMAIL_SEND_SCOPE } from "../constants.js";
+import { DEFAULT_OAUTH_CLIENT_METADATA_URL } from "../constants.js";
 
 export interface DefaultOAuthClientMetadata {
   clientId: string;
@@ -26,10 +26,6 @@ export async function fetchDefaultOAuthClient(
     | Record<string, unknown>
     | undefined;
   if (!body) {
-    return undefined;
-  }
-
-  if (body.scope !== undefined && body.scope !== GMAIL_SEND_SCOPE) {
     return undefined;
   }
 
